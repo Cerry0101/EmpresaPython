@@ -1,4 +1,4 @@
-from db import EmpresaCrud, criarBD
+from db import AtividadeCrud, EmpresaCrud, criarBD
 import requests
 import os.path
 
@@ -29,10 +29,9 @@ while True:
 
         0 - Sair
         1 - Cadastrar Empresa
-        2 - Listas Empresas
+        2 - Listar Empresas
         3 - Deletar empresa
-        4 - Atualizar dados da empresa
-        5 - serviços
+        4 - Listar Atividades 
 
     """)        
     opcao = input('Insira a opcao: ')
@@ -72,4 +71,8 @@ while True:
         empresa_id = input ("Digite o Id da empresa: ")
         EmpresaCrud.deletar(empresa_id) 
         print("Empresa deletada")
+    elif(opcao == "4"):
+        EmpresaCrud.listar()
+        empresa_id = input ("Digite o Id da empresa: ")
+        AtividadeCrud.listar(empresa_id) 
 

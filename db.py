@@ -13,7 +13,7 @@ def criarBD():
 
     query = """
     CREATE TABLE empresa(
-        id INT PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome varchar(100) NOT NULL,   
         cnpj varchar(14) unique,
         telefone varchar(11),
@@ -25,9 +25,9 @@ def criarBD():
 
     query = """ 
     CREATE TABLE servico(
-        id INT PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome varchar(100) NOT NULL,
-        empresa_id INT,
+        empresa_id INTEGER,
         foreign key (empresa_id) references empresa(id) ON DELETE CASCADE  
     )"""
 
@@ -35,9 +35,9 @@ def criarBD():
 
     query = """ 
     CREATE TABLE servico_prestado(
-        id INT PRIMARY KEY,
-        empresa_id INT,
-        servico_id INT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        empresa_id INTEGER,
+        servico_id INTEGER,
         foreign key (empresa_id) references empresa(id) ON DELETE CASCADE,
         foreign key (servico_id) references servico(id) ON DELETE CASCADE
     )"""
@@ -46,11 +46,11 @@ def criarBD():
 
     query = """ 
     CREATE TABLE atividade (
-        id INT PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         codigo varchar(45),
         descricao varchar(150),
         principal boolean,
-        empresa_id INT,
+        empresa_id INTEGER,
         foreign key (empresa_id) references empresa(id) ON DELETE CASCADE
     )"""
 
@@ -64,19 +64,27 @@ class EmpresaCrud:
     def add(params): 
         conn = sqlite3.connect('empresas.db')  
 
-        query = ("INSERT INTO empresa (nome, cnpj, telefone, email, uf) "
+        query = ("INSERT INTO empresa ( nome, cnpj, telefone, email, uf) "
                 "VALUES (:nome, :cnpj, :telefone, :email, :uf)")
 
         conn.execute(query, params)
         conn.commit()
+        cursor = conn.execute("SELECT * from empresa where cnpj = '{}'".format(params['cnpj']))
+
+        empresa_criada = cursor.fetchone()
+
         conn.close()
+        print(empresa_criada)
+        return empresa_criada
+
 
     def listar():
         conn = sqlite3.connect('empresas.db')  
 
         cursor = conn.cursor()
         cursor = conn.execute("SELECT * from empresa")
-        print(cursor.fetchall())
+        for i in cursor.fetchall():
+            print(i) 
         conn.close()     
     
     def deletar(id):
@@ -151,10 +159,9 @@ class AtividadeCrud:
         conn.commit()
         conn.close()
 
-    def listar():
+    def listar(empresa_id):
         conn = sqlite3.connect('empresas.db')  
-        cursor = conn.cursor()
-        cursor = conn.execute("SELECT * from atividade")
+        cursor = conn.execute("SELECT * from atividade where empresa_id = '{}'".format(empresa_id))
         print(cursor.fetchall())
         conn.close() 
 
