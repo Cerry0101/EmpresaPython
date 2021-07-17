@@ -1,10 +1,10 @@
-import requests #importar a biblioteca 
+import requests 
 
-cnpj = input("Insira um cnpj: ") #input para pedir cnpj
-url = "https://www.receitaws.com.br/v1/cnpj/" + cnpj #requisição da url para consultar o cnpj
+cnpj = input("Insira um cnpj: ") 
+url = "https://www.receitaws.com.br/v1/cnpj/" + cnpj
 
-resposta = requests.get(url) #buscar na url cnpj
-data = resposta.json() #trazer a resposta num formato json
+resposta = requests.get(url) 
+data = resposta.json() 
 print(resposta)
 print(data)
 if(data["status"] == "ERROR"):
