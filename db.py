@@ -174,3 +174,13 @@ class AtividadeCrud:
         conn.execute(query, params) 
         conn.commit() 
         conn.close()
+    
+    def update(id, param):
+        conn = sqlite3.connect('empresas.db') 
+
+        query = ('UPDATE empresa SET :param WHERE id_empresa=:id ') 
+        params = {'id': id, 'params': param}
+
+        conn.execute(query, params) 
+        conn.commit() 
+        conn.close()
